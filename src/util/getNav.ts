@@ -1,8 +1,8 @@
 import type { AstroGlobal } from 'astro';
-import { allPages } from '../content';
-import type { NavDict } from '../i18n/translation-checkers';
-import { fallbackLang, navTranslations } from '../i18n/util';
-import { getLanguageFromURL, stripLangFromSlug } from '../util';
+import { allPages } from '~/content';
+import type { NavDict } from '~/i18n/translation-checkers';
+import { fallbackLang, navTranslations } from '~/i18n/util';
+import { getLanguageFromURL, stripLangFromSlug } from '~/util';
 import { groupPagesByLang } from './groupPagesByLang';
 
 const pagesByLang = groupPagesByLang(allPages);

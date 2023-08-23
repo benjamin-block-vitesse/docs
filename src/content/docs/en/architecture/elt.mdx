@@ -1,0 +1,30 @@
+---
+title: Extract Load Transform
+description: "."
+---
+
+Data is ingested into the Lakehouse using either an EventHub or API call using Spark Clusters. Official and third party python libraries are utilised to make the API calls.
+
+
+## Ingestion Pattern
+Vitesse uses 4 ingestion patterns. They are listed below in order of preference. All ingestion patterns, except Streaming, are orchestrated using Airflow.
+
+### Streaming
+When a system generates events the events should be written to the storage container. Having a push rather than a pull based system
+### Incremental
+Ingestion is based on a monotonically increasing integer or a datetime field representing the write or modify date of the row.
+### CDC (Change Data Capture)
+Several Slowly Changing Dimension tables have been identified in SM which currently have no change logs or status update key. Rather than add additional fields it was agreed with Dev to turn on CDC.
+### Full
+Full Ingestion should not be used unless there is no alternative. Any tables with full ingestion should be documented and discussed with the system architects.
+
+## Ingestion Parameters
+The ingestion parameters are define for each table and use by `vitesse.ingestion` to query the data source.
+1. Ingestion.Pattern: Defines the ingestion strategy for table
+2. Ingestion.Key: The field use when the ingestion pattern is not full
+3. Ingestion.KeyType: DateTime keys need to be transformed due to different format in source systems and pyspark.
+4. Ingestion.Watermark: Maximum value of the Ingestion.Key ingested during the last update.
+<img width="997" alt="image" src="https://user-images.githubusercontent.com/106250537/229278792-e653e0b9-d65f-4612-a58b-bf1ea17a1944.png">
+
+
+

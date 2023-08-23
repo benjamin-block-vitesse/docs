@@ -29,16 +29,16 @@ const sidebarSections = (await getNav(Astro)).reduce((collection, item) => {
 }, [] as Parameters<typeof SidebarContent>[0]['sidebarSections']);
 
 const learnSections = sidebarSections.filter((section) => section.type === 'learn');
-const apiSections = sidebarSections.filter((section) => section.type === 'api');
+const internalSections = sidebarSections.filter((section) => section.type === 'internal');
 
-let activeTab: 'learn' | 'api' = 'learn';
+let activeTab: 'learn' | 'internal' = 'learn';
 
 // Certain pages are not in the sidebar nav, so we manually set the active tab based on other factors (e.g. Algolia page category).
 const isReference = ['Error Reference', 'Reference'].includes(
 	getPageCategory({ pathname: currentPage })
 );
 if (isReference) {
-	activeTab = 'api';
+	activeTab = 'internal';
 } else {
 	// Match against the two URL segments after the language tag to include sub-pages.
 	const base = currentPageMatch.split('/').slice(1, 3).join('/');
@@ -54,19 +54,21 @@ if (isReference) {
 	<SidebarToggleTabGroup
 		client:load
 		defaultActiveTab={activeTab}
-		labels={{ learn: t('leftSidebar.learnTab'), api: t('leftSidebar.referenceTab') }}
+		labels={{ learn: t('leftSidebar.learnTab'), internal: t('leftSidebar.internalTab') }}
 	/>
 	<ul class={`nav-groups`}>
+		<!--learn sidebar populates the learn section-->
 		<SidebarContent
 			type={'learn'}
 			defaultActiveTab={activeTab}
 			sidebarSections={learnSections}
 			currentPageMatch={currentPageMatch}
 		/>
+		<!--api sidebar populates the references section-->
 		<SidebarContent
-			type={'api'}
+			type={'internal'}
 			defaultActiveTab={activeTab}
-			sidebarSections={apiSections}
+			sidebarSections={internalSections}
 			currentPageMatch={currentPageMatch}
 		/>
 		<li>

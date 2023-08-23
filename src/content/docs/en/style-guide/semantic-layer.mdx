@@ -1,0 +1,276 @@
+---
+title: Semantic Layer
+description: "."
+---
+
+## SQL model
+- Use lowercase SQL
+- Put each selected column on its own line
+- Indent where conditions
+- Left align SQL keywords
+- Use single quotes
+- Use `!=` over `<>`
+- Commas should be at the the end of lines
+- Break long lists of `in` values into multiple indented lines
+- [Group by using numbers](https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1/)
+
+
+### Example SQL
+
+```sql
+with batch as (
+    select
+        BatchId as batch_id,
+        JobId as job_id,
+        AccountId as bank_account_id,
+        GbpValue as payment_in_gbp,
+        BankJobStatus as job_status,
+        BatchStatus as batch_status,
+        AutoProcessed as auto_processed,
+        BatchCreatedOn as batch_created_on
+    from gold.payment.batch_ltd
+),
+
+batch_entry as (
+    select
+        BatchId as batch_id,
+        Succeeded as succeeded,
+        FailureReason as failure_reason,
+
+        sum(Amount) as payment_amount,
+        count(BatchEntryId) as payment_count
+    from gold.payment.batch_details_ltd
+    GROUP BY 1,2,3
+),
+
+final as (
+    select *,
+    (case
+        when auto_processed is false and batch_status ="Completed" then "Manual"
+        when auto_processed is true and batch_status ="Completed" then "STP"
+    end) as processing_type,
+    (case when batch_status ="Completed" then payment_in_gbp else null end) as total_payment_in_gbp,
+    (case when batch_status ="Completed" then payment_count else null end) as total_payment_count,
+    (case when auto_processed is false and batch_status ="Completed" then payment_in_gbp else null end) as manual_payment_in_gbp,
+    (case when auto_processed is false and batch_status ="Completed" then payment_count else null end) as manual_payment_count,
+    (case when auto_processed is true and batch_status ="Completed" then payment_in_gbp else null end) as stp_payment_in_gbp,
+    (case when auto_processed is true and batch_status ="Completed" then payment_count else null end) as stp_payment_count,
+    (case when batch_status ="Error" then payment_in_gbp else null end) as error_payment_in_gbp,
+    (case when batch_status ="Error" then payment_count else null end) as error_payment_count,
+    (case when batch_status ="Paused" then payment_in_gbp else null end) as paused_payment_in_gbp,
+    (case when batch_status ="Paused" then payment_count else null end) as paused_payment_count,
+    (case when batch_status not in ("Completed", "Cancelled") then payment_in_gbp else null end) as open_payment_in_gbp,
+    (case when batch_status not in ("Completed", "Cancelled") then payment_count else null end) as open_payment_count
+
+    from batch
+    join batch_entry using (batch_id)
+)
+
+select * from final
+```
+
+## yml documentation
+
+```yml
+version: 2
+
+models:
+  - name: report_vitesse__balance_daily
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - account_id
+            - date
+
+metrics:
+  - name: balance
+    label: Balance
+    model: ref('report_vitesse__balance_daily')
+    description: "average balance"
+
+    calculation_method: average
+    expression: amount
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    dimensions:
+      - Customer
+      - Account
+      - AccountType
+      - AccountCCY
+      - ProductType
+      - Vertical
+
+
+  - name: balance_unapplied
+    label: Balance Unapplied
+    model: ref('report_vitesse__balance_daily')
+    description: "unapplied balance"
+
+    calculation_method: sum
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: "'Unapplied'"
+
+
+  - name: balance_fx
+    label: Balance FX
+    model: ref('report_vitesse__balance_daily')
+    description: "fX balance"
+
+    calculation_method: sum
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: "'FX'"
+
+
+  - name: balance_contra
+    label: Balance FX Contra
+    model: ref('report_vitesse__balance_daily')
+    description: "contra balance"
+
+    calculation_method: abs(sum)
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: "'FX'"
+
+
+  - name: balance_emoney
+    label: Balance E-Money
+    model: ref('report_vitesse__balance_daily')
+    description: "e-money balance which is made up of merchant, unapplied credits, and trust"
+
+    calculation_method: abs(sum)
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: "'Merchant','Unapplied Credits','Trust'"
+
+
+  - name: balance_customer
+    label: Balance Customer
+    model: ref('report_vitesse__balance_daily')
+    description: "customer balance"
+
+    calculation_method: abs(sum)
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: "'Merchant','Unapplied Credits'"
+
+  - name: balance_trust
+    label: Balance Trust
+    model: ref('report_vitesse__balance_daily')
+    description: "trust balance"
+
+    calculation_method: abs(sum)
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: 'Trust Bank'
+
+
+  - name: trust_percentage
+    label: Trust Percentage
+    description: "percentage of customer funds held in trust"
+
+    calculation_method: derived
+    expression: "{{metric('balance_trust')}} / {{metric('balance_customer')}}"
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    dimensions:
+      - Customer
+      #- TrustAccount
+
+
+  - name: balance_core_liquidity
+    label: Balance Core Liquidity
+    model: ref('report_vitesse__balance_daily')
+    description: "balance held in tier 1 banks"
+
+    calculation_method: sum
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: BankCompany
+        operator: '='
+        value: "'JPM','BAR'"
+
+
+  - name: balance_core_liquidity_percentage
+    label: Balance Core Liquidity Percentage
+    description: "percentage of balance held in tier one banks"
+
+    calculation_method: derived
+    expression: "{{metric('balance_core_liquidity')}} / {{metric('balance')}}"
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: "'Trust Bank','Bank'"
+
+
+  - name: overdrawn_account
+    label: Overdrawn Accounts
+    model: ref('report_vitesse__balance_daily')
+    description: "customer accounts with negative balance"
+
+    calculation_method: sum
+    expression: BalanceInGBP
+
+    timestamp: Date
+    time_grains: [day, week, month, year]
+
+    dimensions:
+      - AccountId
+
+    filters:
+      - field: AccountType
+        operator: '='
+        value: "'Merchant'"
+      - field: BalanceInGBP
+        operator: '<'
+        value: '0'
+```
