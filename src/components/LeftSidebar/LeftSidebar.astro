@@ -1,5 +1,4 @@
 ---
-import Sponsors from './Sponsors.astro';
 import { removeLeadingSlash, removeTrailingSlash } from '../../util';
 import { getNav } from '../../util/getNav';
 import { useTranslations } from '../../i18n/util';
@@ -79,9 +78,6 @@ if (isReference) {
 				client:visible
 				labels={{ useLight: t('themeToggle.useLight'), useDark: t('themeToggle.useDark') }}
 			/>
-		</li>
-		<li>
-			<Sponsors />
 		</li>
 	</ul>
 </nav>
