@@ -8,7 +8,9 @@ import TableOfContents from '../components/RightSidebar/TableOfContents';
 import { useTranslations } from '../i18n/util';
 import { getGithubEditUrl } from '../util/getGithubEditUrl';
 import { getNavLinks } from '../util/getNavLinks';
-import BaseLayout from './BaseLayout.astro';
+import BaseLayout from './base-layout.astro';
+import type { MarkdownHeading } from 'astro';
+import type { CollectionEntry } from 'astro:content';
 
 export interface Props {
 	content: CollectionEntry<'docs'>['data'];

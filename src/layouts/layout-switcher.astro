@@ -1,0 +1,17 @@
+---
+import type { MarkdownHeading } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import DocsLayout from './docs-layout.astro';
+
+
+export interface Props {
+	data: CollectionEntry<'docs'>['data'];
+	headings: MarkdownHeading[];
+}
+
+const { data, headings } = Astro.props;
+---
+
+		<DocsLayout content={data} headings={headings}>
+			<slot />
+		</DocsLayout>

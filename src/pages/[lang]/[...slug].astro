@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { allPages } from '~/content';
-import LayoutSwitcher from '~/layouts/LayoutSwitcher.astro';
+import Layout from '~/layouts/layout-switcher.astro';
 import { getLangFromSlug, stripLangFromSlug } from '~/util';
 
 export async function getStaticPaths() {
@@ -17,4 +17,4 @@ const { data, render } = Astro.props;
 const { Content, headings } = await render();
 ---
 
-<LayoutSwitcher {...{ data, headings }}><Content /></LayoutSwitcher>
+<Layout {...{ data, headings }}><Content /></Layout>
