@@ -1,5 +1,7 @@
 ---
 import { recipePages } from '~/content';
+import { productPages } from '~/content';
+
 import { createIsLangEntry, isEnglishEntry, DocsEntry } from '~/content/config';
 import { getLanguageFromURL, stripLangFromSlug } from '~/util';
 import CardsNav from './NavGrid/CardsNav.astro';
@@ -9,14 +11,14 @@ export interface Props {
 }
 
 const lang = getLanguageFromURL(Astro.url.pathname);
-const langRecipes = recipePages.filter(createIsLangEntry(lang));
-const englishRecipes = recipePages.filter(isEnglishEntry);
+const langRecipes = productPages.filter(createIsLangEntry(lang));
+const englishRecipes = productPages.filter(isEnglishEntry);
 
 /** An array of all recipes, using translations if available and falling back to English otherwise. */
 const recipes = englishRecipes.map((fallback) => {
 	const slug = stripLangFromSlug(fallback.slug);
 	const translation = langRecipes.find((doc) => stripLangFromSlug(doc.slug) === slug);
-	return (translation as DocsEntry<'recipe'>) || (fallback as DocsEntry<'recipe'>);
+	return (translation as DocsEntry<'product'>) || (fallback as DocsEntry<'product'>);
 });
 ---
 

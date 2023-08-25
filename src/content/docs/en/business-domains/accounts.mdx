@@ -1,16 +1,16 @@
 ---
 title: Accounts
 description: "."
+
 ---
 
-# Introduction
 Accounts are the basis of the SM ledger activity. Every movement within SM results in one account being credited and another debited.
 Merchants are collections of Accounts based on various groupings.
 Customers do not exist in the Product and are defined in Salesforce.
 
+<img src="/erd/erd_accounts.png" alt="entity relationship diagram of accounts." />
 
-
-## Account Hierarchy
+### Account Hierarchy
 The existing Hierarchy is Customer>Merchant>Account. SM does not have the concept of Customer. It is managed through Salesforce and the "Reporting Name" string in the SM Merchants.Merchant Table. Merchants were originally envisioned to function as Customer, but Customers now 1000s of Merchants.
 
 Merchants have multiple use cases:
@@ -18,11 +18,11 @@ Merchants have multiple use cases:
 2. Business Line or Geography
 3. The Customers of Vitesse's Customers.
 
-# Account
+## Account
 
 Accounts are the smallest hierarchal unit. Each Account has a balance in a single currency. For every debit (credit) to an account there is a corresponding credit (debit) to a different account. Most transaction involve moving funds through multiple accounts.
 
-## AccountType
+### AccountType
 |AccountTypeId| AccountType | Use Case |
 |--| --- | -- |
 |0| Merchant | Transactional Accounts of our Customers. Non-Transactional Accounts serving as access points for our Customer's TPA/DCA |
@@ -51,17 +51,17 @@ Accounts are the smallest hierarchal unit. Each Account has a balance in a singl
 |23| Card Rolling Reserve |
 |24| Trust Bank | Isolate funds for a Customer's Account or a sub-set of Accounts. Interest Earned must be Shared with the Customer. Functionally a Sub-AccountType of Bank |
 
-# Bank
+## Bank
 Bank Accounts
 1. Hold money for a pool of clients
 2. Hold money for a single client
 
 SM does not document the purpose of any Bank Account. Trust Accounts are a Type of Bank Account, but were defined as a separate entity rather than a Sub-Type.
 
-## BankAccount
+### BankAccount
 Each Bank has a Bank Account and a Bank Liquidity Account. Ops has stated that the Bank Liquidity Accounts are artifact of the current reconciliation process and would not be necessary in a best practices environment.
 
-# Merchant
+## Merchant
 Merchant was originally envisioned as Customer, but is not a current proxy for Customer. Many Customers have 10s or even 100s of Merchants.
 Merchants now represent
 * Loss funds
@@ -70,28 +70,24 @@ Merchants now represent
 * Not transactional accounts which are a work around of the Product Access configuration.
 
 
-## MerchantAccount
+### MerchantAccount
 A given Merchant can only have 1 Merchant Account per Currency Type.
 
-## MerchantAccountSubType
+### MerchantAccountSubType
 There are 3 Merchant SubAccountTypes
 * Standard - Traditional Accounts which both hold funds and make payments.
 * Funding - Used in FCP and MSF. Funding Accounts do not make payment, but provide liquidity to one or more payment accounts.
 * Payment - Used in FCP and MSF. Payment Accounts do not persist a non-zero balance when a payment is made funds are drawn from one or more funding accounts.
 
-## MerchantStatus
+### MerchantStatus
 Merchant Status determines of the Account is Active or Closed. Vitesse No longer closes Accounts because it removes visibility to external users. When an Merchant is closed the pre-fix "Closed:" is added to the Merchant name. the process is not a valid solution. Status should be at the Account level not the Merchant level. Closing of Accounts for a given Merchant should be independent. Data Ignores the Prefix of Closed when calculating Account Management Fees.
 
-# Customer
+## Customer
 The product does not have a concept of customer. Finance introduced a string field of "Reporting Name" as a stand in. The Salesforce Customer Name is join to "Reporting Name" to create Customer dimensions for Merchant Accounts. Because "Reporting Name" is a free text string misspellings and variant names are given the Customer of "Unknown". Sales and Implementation are responsible for correcting ReportingName for Unknown Customers.
 
-## User
+### User
 The User table identifies the two key sales roles for each Customer
 *  Business Development Manager(BD): Generates the initial lead, negotiates the sale, and oversees the onboarding.
 *  Relationship Manager(RM): Owns the relationship long term
 
 There is a handover date for each Customer where the responsibility shifts from BD to RM
-
-## Customer Trust Interest
-For Customers with Trust Accounts Vitesse has agreed an Interest Sharing Schema with the Customer.
-The Annual Interest Rates Customers earn by Currency change over time. The Table records the valid period for each Interest Rate and is maintained by Finance. See [Trust Interest](https://github.com/VitessePSP/data-analytics-pipeline/wiki/TrustInterest)for details on how Interest Values are calculated.

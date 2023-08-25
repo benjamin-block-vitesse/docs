@@ -10,16 +10,14 @@
 export default [
 	{text: 'Start Here', header: true, type: 'learn', key: 'start-here'},
 		{text: 'Getting Started', slug: 'getting-started', key: 'getting-started'},
-		{text: 'Support Requests', slug: 'support-requests', key: 'support-requests'},
+		{text: 'Data Support Requests', slug: 'support-requests', key: 'support-requests'},
 
 	{text: 'Products', header: true, type: 'learn', key: 'products'},
 		{text: 'Customer Health', slug: 'products/customer-health', key: 'products/customer-health'}, 
 		{text: 'Product Health', slug: 'products/product-health', key: 'products/product-health'},
 		{text: 'Liquidity Management', slug: 'products/liquidity-management', key: 'products/liquidity-management'},
 		{text: 'Trust Management', slug: 'products/trust-management', key: 'products/trust-management'},
-		{text: 'Invoices', slug: 'products/invoices', key: 'products/invoices'},
-		{text: 'Month End Closedown', slug: 'products/month-end-closedown', key: 'products/month-end-closedown'},
-		{text: 'More Products', slug: 'products/products', key: 'products/products'},
+		{text: 'All Products', slug: 'products', key: 'products'},
 	
 	{text: 'Business Domains', header: true, type: 'learn', key: 'business-domains'},
 		{text: 'Accounts', slug: 'business-domains/accounts', key: 'business-domains/accounts'},
