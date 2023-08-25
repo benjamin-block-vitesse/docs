@@ -1,72 +1,61 @@
 ---
-const { data } = Astro.props;
-const hasScreenshot = !!data.demo;
-const backgroundStyle = hasScreenshot
-	? `url('https://v1.screenshot.11ty.dev/${encodeURIComponent(data.demo)}/medium/9:16/')`
-	: `linear-gradient(60deg, var(--theme-bg-accent), var(--theme-accent)) var(--theme-glow-diffuse)`;
+interface Props {
+	title: string;
+	body: string;
+	href: string;
+}
+
+const { href, title, body } = Astro.props;
 ---
 
-<article
-	class={`card ${hasScreenshot ? 'has-screenshot' : ''}`}
-	style={`background: ${backgroundStyle}; background-size: cover;`}
->
-	{hasScreenshot && <div class="background-dimmer" />}
-	<div class="card-body">
-		<a href={data.github} class="card-header" target="_blank">
-			{data.name}
-			<span>{` →`}</span>
-		</a>
-	</div>
-</article>
-
+<li class="link-card">
+	<a href={href}>
+		<h2>
+			{title}
+			<span>&rarr;</span>
+		</h2>
+		<p>
+			{body}
+		</p>
+	</a>
+</li>
 <style>
-	.card {
-		position: relative;
+	.link-card {
+		list-style: none;
 		display: flex;
-		flex-direction: column;
-		grid-column: span 1;
-		flex-grow: 1;
-		height: 200px;
-		justify-content: center;
-		align-items: center;
-		padding: 1rem;
-		text-align: center;
-		/* Neon glow effect */
-		border-radius: 2px;
-		border: 1px solid var(--theme-glow-highlight);
-		box-shadow: 0 0 var(--theme-glow-blur) var(--theme-glow-diffuse),
-			inset 0 0 var(--theme-glow-blur) var(--theme-glow-diffuse);
+		padding: 1px;
+		background-color: #23262d;
+		background-image: none;
+		background-size: 400%;
+		border-radius: 7px;
+		background-position: 100%;
+		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 	}
-	.card-header {
-		display: block;
-		flex-grow: 1;
-		font-weight: bold;
-		font-size: 1.8rem;
-		text-decoration: none;
-		transition: transform 180ms ease-out;
-	}
-	.card-header:hover,
-	.card-header:focus {
-		transform: translateY(-2px);
-	}
-	.background-dimmer {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 100%;
+	.link-card > a {
 		width: 100%;
-		background: linear-gradient(45deg, #0004, #000b) var(--theme-glow-diffuse);
-		z-index: 2;
-	}
-	.card-body,
-	.card-header {
-		color: var(--text-color);
-	}
-	.card-body {
-		z-index: 3;
-	}
-	.card.has-screenshot .card-header,
-	.card.has-screenshot .card-body {
+		text-decoration: none;
+		line-height: 1.4;
+		padding: calc(1.5rem - 1px);
+		border-radius: 8px;
 		color: white;
+		background-color: #23262d;
+		opacity: 0.8;
+	}
+	h2 {
+		margin: 0;
+		font-size: 1.25rem;
+		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	p {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+	}
+	.link-card:is(:hover, :focus-within) {
+		background-position: 0;
+		background-image: var(--accent-gradient);
+	}
+	.link-card:is(:hover, :focus-within) h2 {
+		color: rgb(var(--accent-light));
 	}
 </style>

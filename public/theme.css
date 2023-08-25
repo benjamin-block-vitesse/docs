@@ -76,6 +76,7 @@
 	--color-base-teal: 180, 80%;
 	--color-base-green: 158, 79%;
 	--color-base-orange: 22, 100%;
+	--color-base-pink: 1, 83%;
 	--color-base-purple: 269, 79%;
 	--color-base-red: 351, 100%;
 	--color-base-yellow: 41, 100%;
@@ -102,6 +103,7 @@
 	--color-blue-dark: var(--color-base-blue-dark), 39%;
 	--color-green: var(--color-base-green), 42%;
 	--color-orange: var(--color-base-orange), 50%;
+	--color-pink: var(--color-base-pink), 63%;
 	--color-purple: var(--color-base-purple), 54%;
 	--color-red: var(--color-base-red), 54%;
 	--color-yellow: var(--color-base-yellow), 59%;
@@ -110,8 +112,8 @@
 :root,
 ::backdrop {
 	color-scheme: light;
-	--theme-accent: hsla(var(--color-orange), 1);
-	--theme-accent-secondary: hsl(324, 75%, 38%);
+	--theme-accent: #ef5654;
+	--theme-accent-secondary:#ef5654;
 	--theme-dim: hsla(var(--color-gray-70), 1);
 	--theme-dim-light: hsla(var(--color-gray-80), 1);
 	--theme-dim-lighter: hsla(var(--color-gray-90), 1);
@@ -162,11 +164,9 @@
 .theme-dark ::backdrop {
 	color-scheme: dark;
 	/* We lighten-up the orange in dark mode, to help with link contrast. */
-	--color-orange: var(--color-base-orange), 60%;
-	--theme-accent-opacity: 0.4;
-	--theme-accent: hsla(var(--color-orange), 1);
-	--theme-accent-secondary: hsla(var(--color-orange), 1);
-	--theme-text-accent: hsla(var(--color-orange), 1);
+	--theme-accent: #ef5654;
+	--theme-accent-secondary: #ef5654;
+	--theme-text-accent: #ef5654;
 	--theme-dim: hsla(var(--color-gray-90), 0.3);
 	--theme-dim-light: hsla(var(--color-gray-90), 0.2);
 	--theme-dim-lighter: hsla(var(--color-gray-90), 0.1);
