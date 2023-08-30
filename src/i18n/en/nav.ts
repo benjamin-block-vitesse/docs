@@ -33,7 +33,11 @@ export default [
 	
 	{text: 'Databricks', header: true, type: 'learn', key: 'databricks'},
 		{text: 'Guides', slug: 'databricks/databricks-guides', key: 'databricks/databricks-guides'},
-		{text: 'Products', slug: 'databricks/databricks-reports', key: 'databricks/databricks-reports'},	
+		{text: 'Queries', slug: 'databricks/databricks-queries', key: 'databricks/databricks-queries'},	
+
+	{text: 'Start Here', header: true, type:'internal',key: 'project-management'},
+		{text: 'Getting Started', slug: 'getting-started-architecture', key: 'getting-started-architecture'},
+		{text: 'Data Hub', slug: 'data-hub', key: 'data-hub'},
 	
 	{text: 'Project Management', header: true, type:'internal',key: 'project-management'},
 		{text: 'Roadmap', slug: 'project-management/roadmap', key: 'project-management/roadmap'},
