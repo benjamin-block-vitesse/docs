@@ -1,0 +1,28 @@
+---
+title: Requests
+description: "The request schema documents all payment requests made by Customers.
+"
+---
+
+The request schema documents all payment requests made by Customers.
+
+<img src="/erd/erd_requests.png" alt="entity relationship diagram of requests." />
+
+
+## Route & Recipient
+Dimension tables identifying the Bank Route, Recipient dimensions, and are used to calculate the Clearing Type. 
+
+## Clearing Types
+No data around Clearing Type is transmitted from the payment to the platform. The most probable Clearing Type for a given route were defined by the pricing team. If the table does not contain a entery matching the route the Clearing Type is assumed to be "International- Destionation CCY"
+
+## Requests Types
+1. Single Payment
+Customers request a single payment using the Single Payment Interface.
+
+2. Merchant Batch
+Customers upload a Batch of payments using the Batch Interface. Batch size by Customer is a key metric to understand usage.
+
+3. API
+
+API payments are inferred rather than explicitly defined in SM. Any TransactionRequestIds not present in Single Payment or Merchant Batch tables is classified as API. 
+Host to Host is a SubType of API. Awaiting Dev to provide means of identification.

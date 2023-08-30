@@ -1,0 +1,93 @@
+---
+title: Accounts
+description: "."
+
+---
+
+Accounts are the basis of the SM ledger activity. Every movement within SM results in one account being credited and another debited.
+Merchants are collections of Accounts based on various groupings.
+Customers do not exist in the Product and are defined in Salesforce.
+
+<img src="/erd/erd_accounts.png" alt="entity relationship diagram of accounts." />
+
+### Account Hierarchy
+The existing Hierarchy is Customer>Merchant>Account. SM does not have the concept of Customer. It is managed through Salesforce and the "Reporting Name" string in the SM Merchants.Merchant Table. Merchants were originally envisioned to function as Customer, but Customers now 1000s of Merchants.
+
+Merchants have multiple use cases:
+1. Loss Fund
+2. Business Line or Geography
+3. The Customers of Vitesse's Customers.
+
+## Account
+
+Accounts are the smallest hierarchal unit. Each Account has a balance in a single currency. For every debit (credit) to an account there is a corresponding credit (debit) to a different account. Most transaction involve moving funds through multiple accounts.
+
+### AccountType
+|AccountTypeId| AccountType | Use Case |
+|--| --- | -- |
+|0| Merchant | Transactional Accounts of our Customers. Non-Transactional Accounts serving as access points for our Customer's TPA/DCA |
+|1| Bank | One to One relationship to a real world Bank Account. Some Accounts are dedicated to a single Customers funds but the Product does not identify this |
+|2| Bank Liquidity | Each Bank has a Bank Account has a corresponding Liquidity Account. This is an artifact of our recs process and not a required feature |
+|3|
+|4|
+|5|
+|6|
+|7|
+|8|
+|9|
+|10| System |
+|11| Returned Items |
+|12| Unapplied Credits | Funds are disposed into Unapplied Credits, when Funding Instructions are missing information to apply the Funds to a Merchant Account |
+|13| Unapplied Debits | A Payment request can be issued multiple times to the Bank next work off a single TransactionReqeust. The Customer's MerchantAccount is only debited once, but the Vitesse's Real Bank Account is debited more than once. Ops adds a unapplied debit for each incident and attempts to recover the funds or writes them off.
+|14| Fees | Bank Fees Charged to Vitesse for processing Payouts |
+|15| Interest | Some Interest is calculated by the Product but a significant amount is calculated by Finance |
+|16| FX | Hold FX position for each currency. When transaction involve multiple currencies funds are moved in and of of FX pair rather than between the ultimate debit and credit account |
+|17| Errors |
+|18| Losses |
+|19| Card |
+|20| Trading Revenue | TX Commission earned on cross-boarder Payouts |
+|21| Transaction Revenue | Merchant Fees earned on domestic and cross-boarder payments |
+|22| Merchant Invoice | Fees not debited from the Merchant Account are accrued in Merchant Invoice then invoiced to the Customer.
+|23| Card Rolling Reserve |
+|24| Trust Bank | Isolate funds for a Customer's Account or a sub-set of Accounts. Interest Earned must be Shared with the Customer. Functionally a Sub-AccountType of Bank |
+
+## Bank
+Bank Accounts
+1. Hold money for a pool of clients
+2. Hold money for a single client
+
+SM does not document the purpose of any Bank Account. Trust Accounts are a Type of Bank Account, but were defined as a separate entity rather than a Sub-Type.
+
+### BankAccount
+Each Bank has a Bank Account and a Bank Liquidity Account. Ops has stated that the Bank Liquidity Accounts are artifact of the current reconciliation process and would not be necessary in a best practices environment.
+
+## Merchant
+Merchant was originally envisioned as Customer, but is not a current proxy for Customer. Many Customers have 10s or even 100s of Merchants.
+Merchants now represent
+* Loss funds
+* Customer's Customers for Customers such as A2+B or Papaya.
+* Geographic or Business Line Divisions
+* Not transactional accounts which are a work around of the Product Access configuration.
+
+
+### MerchantAccount
+A given Merchant can only have 1 Merchant Account per Currency Type.
+
+### MerchantAccountSubType
+There are 3 Merchant SubAccountTypes
+* Standard - Traditional Accounts which both hold funds and make payments.
+* Funding - Used in FCP and MSF. Funding Accounts do not make payment, but provide liquidity to one or more payment accounts.
+* Payment - Used in FCP and MSF. Payment Accounts do not persist a non-zero balance when a payment is made funds are drawn from one or more funding accounts.
+
+### MerchantStatus
+Merchant Status determines of the Account is Active or Closed. Vitesse No longer closes Accounts because it removes visibility to external users. When an Merchant is closed the pre-fix "Closed:" is added to the Merchant name. the process is not a valid solution. Status should be at the Account level not the Merchant level. Closing of Accounts for a given Merchant should be independent. Data Ignores the Prefix of Closed when calculating Account Management Fees.
+
+## Customer
+The product does not have a concept of customer. Finance introduced a string field of "Reporting Name" as a stand in. The Salesforce Customer Name is join to "Reporting Name" to create Customer dimensions for Merchant Accounts. Because "Reporting Name" is a free text string misspellings and variant names are given the Customer of "Unknown". Sales and Implementation are responsible for correcting ReportingName for Unknown Customers.
+
+### User
+The User table identifies the two key sales roles for each Customer
+*  Business Development Manager(BD): Generates the initial lead, negotiates the sale, and oversees the onboarding.
+*  Relationship Manager(RM): Owns the relationship long term
+
+There is a handover date for each Customer where the responsibility shifts from BD to RM

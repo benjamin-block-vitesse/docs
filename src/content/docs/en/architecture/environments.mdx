@@ -1,0 +1,50 @@
+---
+title: Environments
+description: "."
+---
+
+Vitesse currently uses two environments **Development** and **Production** for both Databricks and Tableau.
+* Production and Development branches exist in GitHub and are linked to the Databricks and Tableau development environments.
+* The production and Development branches require a pull request before merging and cannot be committed to directly.
+* Pull Request to production or development Branches require approval of another member of the data team.
+
+# Databricks
+There is complete environmental separation between Development and Production Environments.
+## Development Branch
+* The development resource group is deployed on the Vitesse Dev environment (biz-spark)
+* All Pipeline development and testing is performed in the Dev Environment.
+* Commits to GitHub Dev Branch are automatically synced to the Databricks Repo using a GitHub Action
+* Dev Team members can develop using either the Databricks UI or the IDE of their choice
+  * https://www.databricks.com/blog/2023/02/14/announcing-a-native-visual-studio-code-experience-for-databricks.html
+  * https://www.databricks.com/blog/2023/04/18/use-databricks-anywhere-databricks-connect-v2.html
+### Process
+1. Create a new branch in your personal Databricks Repo or in your IDE
+2. Modify notebooks committing small changes
+3. Test and validate changes using a All-Purpose Cluster, Great Expectations, and Unit Testing.
+4. Commit changes to the new Branch
+5. Issue a Pull Request to production
+
+## Production Branch
+* The production resource group is deployed on the Vitesse Production Environment (live)
+* No development work is performed in the Production environment
+* The production environment is updated through GitHub by creating a PR to Production from Dev
+* <b> Data Team members can access both Databricks Compute and SQL in the production environment but do not have write access to tables </b>
+  * This isn't workable - anytime an bug is not identified in the Dev environment tables in Production need to be rolled back using Delta Tiem Travel. We need write access, but manual modifications need visibility and review.
+
+# Tableau
+* There is no environmental separation between Development and Production environments. There are cost for an additional Tableau deployment.
+* Workbooks are deployed to Tableau Cloud using a GitHub action which pushes .twb files into the assigned Projects.
+  * The development Project structure is identical to the production environment under a "development" project
+Version Control for Data Sources needs to be investigated. Data Sources are currently deployed from Tableau Desktop or Tableau Cloud.
+## Development Branch
+1. Create a new branch from the Tableau Development branch
+2. Using Tableau Desktop modify or create the workbook.
+3. Commit changes to new branch
+4. Create a pull request to development branch from new branch
+  * There cannot be branch protection on development? None of us can read .twb diffs. Review need to take place in Tableau Cloud.
+## Production Branch
+1. Create a pull request from development to production
+2. Review checks the Report changes in Tableau Cloud and approves the PR to Production.
+  * This should only be format and functionality not metrics? Metrics will move into a semantic layer and are not part of the Tableau QA?
+# Git Commit best practices
+https://gist.github.com/luismts/495d982e8c5b1a0ced4a57cf3d93cf60

@@ -1,0 +1,60 @@
+---
+title: Month End Closedown
+description: "Recognize Revenue and Fees accrued during the month."
+type: product
+---
+
+Revenues and Fees are accrued in four account types throughout the month. 
+On the first of each month an automated job calculates the net change during the month and 
+generates a Journal input which Operations manually Journal into the product.
+
+Closedown Accrual Account Types:
+* Trading Revenue
+* Transaction Revenue
+* Interest
+* Fees
+
+## Valid Account Type & Account Entry Type Pairings
+Each Account Type has a set of valid Account Entry Types that are included in the closedown. 
+All other Account Entries are flagged to Operations for reversal.The most common errors are 
+<b>Correct Account  but incorrect Account Entry Type</b> and
+<b>Incorrect Account but correct Account Entry Type</b>.
+
+In both cases operations should reverse the Journal in kind and issue a new corrected Journal Transaction. Reversing,
+rather than modifying the account entry type, provides Vitesse with a health metric around Journaling error.
+
+### Trading Revenue
+1. Closedown
+2. FX Commission
+### Transaction Revenue
+1. Closedown
+2. Merchant Fees
+3. Merchant Fee Reversal
+### Interest
+1. Closedown
+2. Interest
+### Fees
+1. Closedown
+2. Fees
+3. Card Fees
+
+## Operations Journaling
+Operations may need to manually closedown an account if the account is disabled during the month. 
+This should be done using the AccountEntry Type Closedown. Using a valid account entry type will result in the 
+account transaction being reversed in month end job.
+
+Operations should correct Journaling errors with the original account entry type. 
+This ensures the net amount for the account entry type is zero. Closing errors down using a
+different account entry type prevent aggregate level reconciliation. If the product is developed 
+so two journals can be linked then matching the account entry types is no longer necessary.
+
+
+## Residual Balance
+When the month end process was carried out manually errors were introduced leaving
+non-zero balances in accounts. These residual values need to either be written off 
+or recognized as fees and revenue through a manual process.
+
+
+## Future Development
+* Remove the manual step of Operations Journaling the ledger movements.
+* Automate the Cash Movements.
