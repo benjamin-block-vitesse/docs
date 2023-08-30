@@ -1,17 +1,11 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
-
-import languages from '../i18n/languages';
-const { lang } = Astro.params;
-export const getStaticPaths = () => Object.keys(languages).map((lang) => ({ params: { lang } }));
-
+import Layout from '../layouts/index-layout.astro';
+import Card from '~/components/Card.astro';
 ---
 
 <Layout title="Welcome to Vitesse Data Hub.">
 	<main>
-
-		<h1>Welcome to the <span class="text-gradient">Data Hub</span></h1>
+		<h1>Welcome to the Data Hub</h1>
 		<p class="instructions">
 			Your home for learning about the lakehouse, reviewing documentation, and accessing data quality tests.
 		</p>
@@ -50,28 +44,12 @@ export const getStaticPaths = () => Object.keys(languages).map((lang) => ({ para
 		font-size: 20px;
 		line-height: 1.6;
 	}
-	.astro-a {
-		position: absolute;
-		top: -32px;
-		left: 50%;
-		transform: translatex(-50%);
-		width: 220px;
-		height: auto;
-		z-index: -1;
-	}
 	h1 {
 		font-size: 4rem;
 		font-weight: 700;
 		line-height: 1;
 		text-align: center;
 		margin-bottom: 1em;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
 	}
 	.instructions {
 		margin-bottom: 2rem;

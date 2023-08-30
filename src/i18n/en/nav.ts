@@ -10,16 +10,14 @@
 export default [
 	{text: 'Start Here', header: true, type: 'learn', key: 'start-here'},
 		{text: 'Getting Started', slug: 'getting-started', key: 'getting-started'},
-		{text: 'Support Requests', slug: 'support-requests', key: 'support-requests'},
+		{text: 'Data Support Requests', slug: 'support-requests', key: 'support-requests'},
 
 	{text: 'Products', header: true, type: 'learn', key: 'products'},
 		{text: 'Customer Health', slug: 'products/customer-health', key: 'products/customer-health'}, 
 		{text: 'Product Health', slug: 'products/product-health', key: 'products/product-health'},
 		{text: 'Liquidity Management', slug: 'products/liquidity-management', key: 'products/liquidity-management'},
 		{text: 'Trust Management', slug: 'products/trust-management', key: 'products/trust-management'},
-		{text: 'Invoices', slug: 'products/invoices', key: 'products/invoices'},
-		{text: 'Month End Closedown', slug: 'products/month-end-closedown', key: 'products/month-end-closedown'},
-		{text: 'More Products', slug: 'products/products', key: 'products/products'},
+		{text: 'All Products', slug: 'products', key: 'products'},
 	
 	{text: 'Business Domains', header: true, type: 'learn', key: 'business-domains'},
 		{text: 'Accounts', slug: 'business-domains/accounts', key: 'business-domains/accounts'},
@@ -31,7 +29,7 @@ export default [
 	
 	{text: 'Tableau', header: true, type: 'learn', key: 'tableau'},
 		{text: 'Guides', slug: 'tableau/tableau-guides', key: 'tableau/tableau-guides'},
-		{text: 'Products', slug: 'tableau/tableau-projects', key: 'tableau/tableau-projects'},
+		{text: 'Workbooks', slug: 'tableau-workbooks', key: 'tableau-workbooks'},
 	
 	{text: 'Databricks', header: true, type: 'learn', key: 'databricks'},
 		{text: 'Guides', slug: 'databricks/databricks-guides', key: 'databricks/databricks-guides'},
@@ -46,14 +44,13 @@ export default [
 	{text: 'Style Guide', header: true, type:'internal',key: 'style-guide'},
 		{text: 'Style Overview', slug: 'style-guide/style-overview', key: 'style-guide/style-overview'},
 		{text: 'Git', slug: 'style-guide/git', key: 'style-guide/git'},
-		{text: 'Unity Catalog', slug: 'style-guide/unity', key: 'style-guide/unity'},
 		{text: 'Semantic Layer', slug: 'style-guide/semantic-layer', key: 'style-guide/semantic-layer'},
 	
 	{text: 'Architecture', header: true, type:'internal',key: 'architecture'},
 		{text: 'Lakehouse', slug: 'architecture/lakehouse', key: 'architecture/lakehouse'},
 		{text: 'Extract Load Transform', slug: 'architecture/elt', key: 'architecture/elt'}, 
+		{text: 'Unity Catalog', slug: 'architecture/unity-catalog', key: 'architecture/unity-catalog'},
 		{text: 'Semantic Layer', slug: 'architecture/semantic-layer', key: 'architecture/semantic-layer'}, 
 		{text: 'Data Quality', slug: 'architecture/data-quality', key: 'architecture/data-quality'},
 		{text: 'Data Governance', slug: 'architecture/data-governance', key: 'architecture/data-governance'}
-	
 ] as const;

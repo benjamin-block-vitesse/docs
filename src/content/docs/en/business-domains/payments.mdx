@@ -1,6 +1,21 @@
 ---
 title: Payments
-description: "."
+description: "Payments are processed through Batching and Banking Jobs."
 ---
 
-Vitesse
+Payments are processed through Batching and Banking Jobs.
+
+<img src="/erd/erd_payments_1.png" alt="entity relationship diagram of payments." />
+<img src="/erd/erd_payments_2.png" alt="entity relationship diagram of payments." />
+
+
+# Batching
+Payments are not processed one at a time, but rather grouped together and sent to Banks in Batches. Closing a batch and send it to a bank is trigged by either maximum number of transactions, maximum time the batch can be open, or manually processed by Ops.
+
+
+# Banking Job
+Once a batch is completed it is processed as a banking job.
+
+## Reconciliation
+The Vitesse Application does not capture the individual transaction status in the Product. A third party allication, Duco, 
+reconciles the vitesse payment instructions with the bank cash movements.
