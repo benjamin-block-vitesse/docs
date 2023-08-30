@@ -1,0 +1,48 @@
+---
+title: Product Health
+description: "Monitors feature adoption and performance for microservices and core functions"
+type: product
+---
+
+Product Health was attempted once before focusing on transaction throughput metrics rather than product feature health 
+usage metrics. Product health needs to be redesigned from the ground up; the below is based on business domains as defined by data. 
+Requires review with Guy Gibbs to agree on scope; work is not committed in the data road map.
+
+* A suite of health metrics needs to be proposed by the sponsor or owner of each new microservice.
+
+
+## Customer and Account Management
+* Account Status provides insight into activity and usage.
+  * Will highlight the issue we have closing accounts.
+* ReportingName not aligned with Salesforce
+* TPAs (additional alias) not aligned with Salesforce
+* On-boarding microservice usage
+* FCP blend gaps
+
+## Funding
+The Product Team is developing the documentation to identify the various funding types used within the Vitesse Application.
+* Funding Mechanism
+* Unapplied resolutions done without split Journaling
+
+
+## Ledger
+Majority of AccountEntry issues are due to Journaling. 
+However, there are instances where Dev incorrectly configures a new feature; 
+AccountEntry monitoring should not be exclusive to Journaling.
+* invalid AccountType, AccountEntryType, and Is Debit pairings.
+* Revenue entries do not reconcile between Merchant, MerchantInvoice and TransactionRevenue Accounts.
+* Payment entries do not reconcile between Merchant and Bank Accounts.
+
+## Pricing
+* Non-invoiceable
+* Customer Accounts with different pricing configurations
+* Payments without Fees
+
+## Batching
+Reroutes, failures, time-to-process
+
+## Transaction Requests
+invalid, time-to-process
+
+
+## Microservices

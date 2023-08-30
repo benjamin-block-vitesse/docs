@@ -1,0 +1,91 @@
+---
+title: Trust Management
+description: "Manages Trust and E-Money balances at the account grain. Calculates Trust interest owed to Customers."
+type: product
+---
+
+The primary functions of Trust Management are
+1. Moving funds between trust and standard bank accounts based to maintain a certain percentage of customer funds in trust.
+2. Calculating the customer interest payment on an account and date grain.
+
+## Terminology
+
+| Entity                  | Description                                                                                                         |
+|-------------------------|---------------------------------------------------------------------------------------------------------------------|
+| Account Balance         | The Balance attributed to an Customer Account in the Product                                                        |
+| Trust Balance	          | The Balance a Customer Account has in Trust.                                                                        |
+| E-Money Balance	        | The Account Balance Less the Trust Balance. Should not become negative.                                             |
+| Trust Split	            | The percentage of Trust Balance moved between a Customer Account and a Trust Account                                |
+| Trust Eligibility	      | Whether an account included in the next Repositioning Run.                                                          |
+| Trust Repositioning     | Weekly Scheduled processes which moves funds in and out of Trust and records the the Trust Balance for Each Account |
+| Scheduled Repositioning | Occurs once a week for all Customer Accounts.                                                                       |
+| Emergency Repositioning | Occurs on an as needed basis to address negative E-money balances for individual Customer Accounts                  |
+
+
+## Process
+<b>Each Monday the Trust Management Product:</b>
+* Calculates the net movement between Trust and E-Money Accounts and record the 
+Trust Balance for each Customer Account.
+* Output is sent to Operations who post a Journal to the Vitesse Application and carry out the cash movement.
+<br/><br/>
+<b>When the Customer Interest Rates are updated the Trust Management Product:</b>
+* Recalculates the interest rates for dates on or after the effective start date of new interest rates.
+<br/><br/>
+<b>End of Each Day:</b>
+* Identifies Customer Accounts with negative E-Money balances and triggers an Emergency Repositioning for each Account
+* Calculates the interest accrued for each Customer Account updating the data model tables.
+<br/><br/>
+<img src="/miro/trust-process.jpeg" alt="trust process diagram." />
+
+
+## Entity Relationships
+There are five entity relationships that make up Trust. 
+None of the relationships are defined in the Vitesse application.
+The relationships are defined in csv files owned by Finance(Mark O’Brien).
+Only Standard Product Accounts are eligible for Trust. FCP, MSF, and ABM accounts are not eligible.
+
+
+| Entity 1         | Entity 2      | Relationship | Description                                                                                                                                                                                                         |
+|------------------|---------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Trust Bank       | Standard Bank | One-To-One   | When Trust Balance is repositioned Funds the Trust Bank is debited/credited while the Standard Bank is credited/debited. The relationship is <span style="color:red">not defined</span> in the Vitesse Application. |
+| Trust Bank       | Customer      | Many-to-One  | Each Trust Bank is associated with a single Customer which is <span style="color:red">not defined</span> in the Vitesse Application                                                                                 |
+| Customer Account | Customer      | Many-to-One  | Customer Accounts are associated with a single customer which is <span style="color:orange">inferred</span> in the Vitesse Application                                                                              |
+| Customer Account | Trust Bank    | Many-to-Many | Customer Accounts are associated with one or Trust Bank Accounts. The relationship and the percentage of Funds for a given relationship are <span style="color:red">not defined</span> in the Vitesse Application.  |
+| Customer         | Interest Rate | One-to-Many  | Interest Rates are set at the Customer, Currency, and Bank grain. The interest rates are <span style="color:red">not defined</span> in the Vitesse Application                                                      |
+
+### Example Relationships
+In Diagram 1
+* Two of the Customer Accounts have a 50%/50% `Trust Split` between two Trusts.
+  * The `Trust Split` can include infinite Trusts each with split percentage between 0.01% and 99.9%. 
+    * `Great Expectations` validates that the `Trust Split` for a given Customer Account sum to 100%.
+* One of the Customer Accounts is ineligible for Trust. eg. a FCP or ABM account.
+In Diagram 2
+* One Customer has three accounts in a given currency each with linked to a different Trust Account.
+  * Sedgwick, Sedgwick Ageas, and Sedgwick Zurich follow this pattern.
+
+<img src="/miro/trust-entity-diagram.jpeg" alt="trust entity relationships." />
+
+
+### Exception Tagging
+<p>Zurich, Ageas are a subset of Sedgwick which exists only for trust purposes. The Trust and Customer Accounts have been 
+  tagged as Zurich and Ageas.</p>
+
+<p>ABM Accounts are not Trust Eligible and have been tagged and used to define lakehouse Customer Account product type.</p>
+
+<p>The assumption in Operations and Finance is that ABM and Sedgwick's Zurich and Ageas Sub-Customers are a legacy product 
+and no new accounts will be created.
+Therefore, only historical accounts will be tagged; 
+Vitesse is choosing not to tag all account to ensure no ABM or Sedgwick Sub-Customers are untagged.
+No one is able to validate that new accounts were created as anything untagged must be assumed to be non-ABM, non-Ageas
+  , and non-Zurich.</p>
+
+
+## Customer Interest Payments
+Vitesse has agreed an Interest Sharing Schema with the Customer on Funds Held in Trust.
+The Annual Interest Rates Customers earn by Currency change over time. The Table records the valid period for each Interest Rate and is maintained by Finance.
+
+
+## Future Development
+* Automation of the Account Movement currently done through Journaling.
+* Automation of the Cash Movement manually carried out by Ops.
+* Entity refactory of the Vitesse Application to support Trust amongst other requirements. 

@@ -1,0 +1,76 @@
+---
+title: Ledgers
+description: "."
+---
+
+The ledger consists of Account Entries and the source account transaction. 
+
+There is a second ledger for activity sitting outside of the Vitesse application which is maintained by Finance.
+
+<img src="/erd/erd_ledgers.png" alt="entity relationship diagram of ledgers." />
+
+## Account Entries
+
+| account_entry_type_id | account_entry_type | account_entry_type_group | definition |
+| --                              | -- | -- | -- |
+| -5 | Account Fee                | Revenue | Revenue invoiced to the customer based on the number of non-disabled accounts. Need to align with 40 | 
+| -4 | Deferral                   | Revenue | Deferred revenue recognition until a later month |
+| -3 | Development Fee            | Revenue | Revenue invoiced to customer to fund development of new features |
+| -2 | Loss Fund Recovery         | Revenue | Revenue invoiced to customer based on work done by Vitesse to recover funds in non-vitesse managed account | 
+| -1 | Service Fee                | Revenue | Revenue invoiced to the customer for services rendered |
+| 0 | Initial Balance             | Automation | Generated at account created. misnomer: the initial balance entry is always zero. it should be lablled account created |
+| 1 | Completed Bankout           | 
+| 2 | Fees                        | Fees | Fees Vitesse pays to banks for processing transactions. Journaled by Ops, various levels of aggregation and time period provided by Banks |
+| 3 | Interest                    | Revenue | Interested on balances earned; only a small subset of interest is recorded in the application ledger |
+| 4 | Internal Liquidity Receipt  | null | null |
+| 5 | Internal Liquidity Reversal | null | null |
+| 6 | Internal Liquidity Payment  | null | null |
+| 7 | Liquidity                   | null | null |
+| 8 | Merchant Liquidity          | Funding | funding of customer account after money is deposited into vitesse bank accounts and funding instructions are provided |
+| 9 | Merchant Liquidity Reversal | Funding | null |
+| 10 | Payin                      | null | null |
+| 11 | Payin Refund               | null | null |
+| 12 | Payin Reversal             | null | null |
+| 13 | Payout                     | Payment | bank transfer payment |
+| 14 | Payout Rejection           | Payment | bank transfer payment is rejected during the Vitesse processing |
+| 15 | Payout Returned            | Payment | bank transfer payment is returned by recipient bank |
+| 16 | Payout Reversal            | Payment | bank transfer payment is reversed for various reason |
+| 17 | Unapplied Credit           | Funding | when funding instructions cannot be actioned the value is moved into Unapplied Credits Accounts |
+| 18 | Unapplied Debit            | null | Cash movement for a transaction was carried out more than once. Vitesse must either recover the additional payment(s) or write of the value |
+| 19 | FX                         | FX | Exchange currency between two FX Accounts for either a customer payment or internal processes |
+| 20 | Internal Liquidity Initiate| Internal Liquidity Initiate
+| 21 | Merchant Fees              | Revenue: Transaction | Payment |
+| 22 | Account Movement           | Liquidity | Movement of funds between two accounts; can be used to Fund an account |
+| 23 | Account Movement Fee       | Revenue: Transaction | Revenue generated when a customer initiates an account movement; not all account movements are charged |
+| 24 | TX Commission              | Revenue: FX | Revenue earned on cross-currency payment. Not all revenue generated from the FX move is attributed to TX Commission; some remains in the FX Accounts and cannot be associated with the originating customer or transaction |
+| 25 | Cheque                     | Payment | A check is produced and sent to the recipient |
+| 26 | Payin Reroute              | Collections | null |
+| 27 | Payout Reroute             | Payment | When a Payment cannot be processed through the bank initially selected a reroute is triggered.
+| 28 | Forward Value Commission   | null | null |
+| 29 | Card Fees                  | Fees | Fees paid by Vitesse for using card services from Banks |
+| 30 | Payout Cancelled           | Payment | Reverses an existing payment due to cancelation request |
+| 31 | Merchant Fee Reversal      | Transaction Fees | Return of Transaction Fees to the Customer; this is not always done if a transaction is reversed. In some case an additional fee is charge on the reversal |
+| 32 | Payout Sweep               | Payment | null |
+| 33 | Completed Bankout Auto     | Completed Bankout Auto
+| 34 | ARCS Urgent Liquidity      | Funding | expedited process to move funds into FCP Funding accounts|
+| 35 | Liquidity Pull             | Liquidity | pulls funds from a funding account into a payment account to cover a single payment |
+| 36 | Liquidity Push             | Liquidity | null |
+| 37 | Liquidity Movement Fee     | Revenue: Transaction | Revenue generated for each funding account involved in a payment |
+| 38 | ARCS Scheduled Liquidity   | Funding | scheduled process to move funds into FCP funding accounts which uses threshold balances |
+| 39 | Closedown                  | Automation | Used for the closedown automation and anytime Ops need to manually closedown an account outside of the automated process |
+| 40 | Account Management Fee     | Revenue: Service | Revenue generated Fees, need to aling naming for -5
+| 41 | FX Loss Fee                | null | null |
+| 42 | Postal Cheque              | Payment | null |
+| 43 | Cheque Cancelled           | Payment | null |
+| 44 | Postal Cheque Cancelled    | Payment | null |
+| 45 | Return Of Funds            | null | **"sending funds back to customer?"** |
+| 46 | Refund Of Payment          | Payment | null |
+| 47 | Correction                 | Correction | Used by Operations to Journal corrections which have no history related to the original entry type |
+
+### Data Quality
+
+<b>to be developed</b>
+
+List the valid account movements in the system which will form the basis of expectations testing on the platform.
+
+This list already exists for the Account Types involved in closedown.

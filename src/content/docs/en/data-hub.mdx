@@ -1,0 +1,32 @@
+---
+title: Data Hub
+description: A basic intro to the Data Do.
+---
+
+How to develop data documentation
+
+
+
+## Creating documentation
+
+- follow the modify link on an existing page to go the .mdx file on github then make and commit changes
+- create a new file in `/scr/docs/en` 
+
+## adding images to documentation
+save .svg and .png files in `/public`. The sub-folder structure can be automatically refactored, feel free to create new 
+sub-folders
+At present there are the following
+- miro: exports of miro documents.
+- erd: entity relationship diagrams
+- logo: svg logo files
+- tableau: for documenting tableau workbooks and guides
+- databricks: for documenting databricks queries and guides
+- assets: catch all for anything else
+
+To add an image to an markdown file use the following code
+'<img src="path relative to /public" alt="alt text description" />'
+
+
+## Future Development
+- enable search of the documentation.
+- enable full screen popout when clicked for all images.
