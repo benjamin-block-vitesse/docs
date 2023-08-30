@@ -29,7 +29,7 @@ export default [
 	
 	{text: 'Tableau', header: true, type: 'learn', key: 'tableau'},
 		{text: 'Guides', slug: 'tableau/tableau-guides', key: 'tableau/tableau-guides'},
-		{text: 'Products', slug: 'tableau/tableau-projects', key: 'tableau/tableau-projects'},
+		{text: 'Workbooks', slug: 'tableau-workbooks', key: 'tableau-workbooks'},
 	
 	{text: 'Databricks', header: true, type: 'learn', key: 'databricks'},
 		{text: 'Guides', slug: 'databricks/databricks-guides', key: 'databricks/databricks-guides'},
@@ -44,14 +44,13 @@ export default [
 	{text: 'Style Guide', header: true, type:'internal',key: 'style-guide'},
 		{text: 'Style Overview', slug: 'style-guide/style-overview', key: 'style-guide/style-overview'},
 		{text: 'Git', slug: 'style-guide/git', key: 'style-guide/git'},
-		{text: 'Unity Catalog', slug: 'style-guide/unity', key: 'style-guide/unity'},
 		{text: 'Semantic Layer', slug: 'style-guide/semantic-layer', key: 'style-guide/semantic-layer'},
 	
 	{text: 'Architecture', header: true, type:'internal',key: 'architecture'},
 		{text: 'Lakehouse', slug: 'architecture/lakehouse', key: 'architecture/lakehouse'},
 		{text: 'Extract Load Transform', slug: 'architecture/elt', key: 'architecture/elt'}, 
+		{text: 'Unity Catalog', slug: 'architecture/unity-catalog', key: 'architecture/unity-catalog'},
 		{text: 'Semantic Layer', slug: 'architecture/semantic-layer', key: 'architecture/semantic-layer'}, 
 		{text: 'Data Quality', slug: 'architecture/data-quality', key: 'architecture/data-quality'},
 		{text: 'Data Governance', slug: 'architecture/data-governance', key: 'architecture/data-governance'}
-	
 ] as const;

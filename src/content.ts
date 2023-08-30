@@ -5,6 +5,7 @@ import {
 	isRecipeEntry,
 	isTutorialEntry,
 	isProductEntry,
+	isTableauEntry,
 } from './content/config';
 
 const isKoreanEntry = createIsLangEntry('ko');
@@ -22,3 +23,5 @@ export const recipePages = allPages.filter(isRecipeEntry);
 export const englishPages = allPages.filter(isEnglishEntry);
 
 export const productPages = allPages.filter(isProductEntry);
+
+export const tableauPages = allPages.filter(isTableauEntry);

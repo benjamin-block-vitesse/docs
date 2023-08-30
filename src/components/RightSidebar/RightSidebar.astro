@@ -1,6 +1,7 @@
 ---
 import TableOfContents from './TableOfContents';
 import ContributeMenu from './ContributeMenu.astro';
+import Links from './Links.astro'
 import generateToc from '../../util/generateToc';
 
 
@@ -20,6 +21,7 @@ const overview = 'Overview';
 		)
 	}
 	<ContributeMenu editHref={githubEditUrl} />
+	<Links/>
 </nav>
 
 <style>

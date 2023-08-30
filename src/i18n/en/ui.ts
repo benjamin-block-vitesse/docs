@@ -26,7 +26,7 @@ export default {
 	'rightSidebar.contributorGuides': 'Contributor Guides',
 	'rightSidebar.editPage': 'Edit this page',
 	'rightSidebar.translatePage': 'Translate this page',
-	'rightSidebar.github': 'Astro Docs on GitHub',
+	'rightSidebar.github': 'Docs on GitHub',
 	// Footer
 	'footer.privacyPolicy': 'Privacy Policy',
 	// `<ThemeToggleButton>` acessibility labels
@@ -120,7 +120,5 @@ export default {
 	'stub.title': 'Expand this stub!',
 	'stub.subtitle': 'This guide is a stub.',
 	'stub.description.migration':
-		'Want to contribute to this guide? Have a blog post, video, or another resource to share about migrating from this technology to Astro?',
-	'stub.description.cms': 'Know more about how to use this CMS with Astro?',
-	'stub.description.backend': 'Know more about how to use this backend service with Astro?',
+		'Want to contribute to this guide? Have a blog post, video, or another resource to share about migrating from this technology to Astro?'
 };

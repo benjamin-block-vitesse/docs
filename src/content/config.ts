@@ -61,6 +61,11 @@ export const productSchema = baseSchema.extend({
 	description: z.string(),
 });
 
+export const tableauSchema = baseSchema.extend({
+	type: z.literal('tableau'),
+	description: z.string(),
+});
+
 export const docsCollectionSchema = z.union([
 	baseSchema,
 	backendSchema,
@@ -71,6 +76,7 @@ export const docsCollectionSchema = z.union([
 	deploySchema,
 	recipeSchema,
 	productSchema,
+	tableauSchema
 ]);
 
 export type DocsEntryData = z.infer<typeof docsCollectionSchema>;
@@ -118,6 +124,7 @@ export const isRecipeEntry = createIsDocsEntry('recipe');
 
 export const isProductEntry = createIsDocsEntry('product');
 
+export const isTableauEntry = createIsDocsEntry('tableau');
 
 export function createIsLangEntry(lang: string) {
 	return (entry: CollectionEntry<'docs'>): boolean => entry.slug.startsWith(lang + '/');
